@@ -19,6 +19,9 @@ import {
     withNullRelationsMock,
     resourceIdObjMetaMock,
     differentAttrsInDataAndIncludedMock,
+    userWithIdlessSpecialties,
+    idlessSpecialty1,
+    idlessSpecialty2,
 } from './mocks';
 
 chai.config.showDiff = true;
@@ -48,6 +51,11 @@ describe('Jsona', () => {
             const jsonBody = jsona.serialize({stuff: user2.model, includeNames: ['specialty', 'town.country']});
             expect(jsonBody.data).to.be.deep.equal(user2.json);
             expect(jsonBody.included).to.be.deep.equal([specialty1.json, specialty2.json, town2.json, country2.json]);
+        });
+
+        it('should build json with collection, with included resources that do not have ids', () => {
+            const jsonBody = jsona.serialize({stuff: userWithIdlessSpecialties.model, includeNames: ['specialty']});
+            expect(jsonBody.included).to.be.deep.equal([idlessSpecialty1.json, idlessSpecialty2.json]);
         });
 
         it('should build json and save null relationships', () => {
